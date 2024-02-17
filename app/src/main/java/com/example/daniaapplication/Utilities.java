@@ -17,4 +17,10 @@ public class Utilities {
         }
         return true;
     }
+
+    public static int songToResId(Context context, String file) {
+        if (isLong(file))
+            return Integer.parseInt(file);
+        return context.getResources().getIdentifier(file, "raw", context.getPackageName());
+    }
 }

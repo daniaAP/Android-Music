@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaActionSound;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,11 +42,14 @@ import java.util.Map;
 import java.util.Set;
 
 //extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener, MediaPlayer.OnCompletionListener, PlayingFragment.PlayingFragmentListener, SeekBar.OnSeekBarChangeListener
-public class PlaylistActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener, PlayingFragment.PlayingFragmentListener {
+public class PlaylistActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemLongClickListener,
+        View.OnClickListener,
+        PlayingFragment.PlayingFragmentListener {
     private ListView listView;//display
     private ArrayList<Song> songs;//DATA
     private ArrayAdapter<Song> arrayAdapter;//Adapter
-    private MediaPlayer player;
+    private MediaPlayer mediaPlayer;
     private PlayingFragment fragment;
     private Song playing;
     private Button playPause, shuffle;
@@ -55,7 +59,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     private Handler mHandler = new Handler();
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-
+    private boolean isPlaying = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,9 +95,22 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Song song = (Song) listView.getItemAtPosition(position);
-        fragment.setSong(String.valueOf(song.getImage()), song.getName());
+        fragment.setSong(String.valueOf(song.getImage()), song);
         index = position;
-        fragment.changeIcon(true);
+
+       loadAndPlaySong(song);
+    }
+
+    private void loadAndPlaySong(Song song) {
+        int songResId = Utilities.songToResId(PlaylistActivity.this, song.getFile());
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            this.isPlaying = false;
+        }
+
+        mediaPlayer = MediaPlayer.create(this, songResId);
+        playPause(song);
     }
 
     /**
@@ -119,7 +136,13 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void next() {
-        Toast.makeText(this, "next", Toast.LENGTH_SHORT).show();
+        if (index == arrayAdapter.getCount()-1){
+            return;
+        }
+        Song song = (Song) listView.getItemAtPosition(++index);
+        fragment.setSong(String.valueOf(song.getImage()), song);
+
+        loadAndPlaySong(song);
     }
 
     /**
@@ -127,19 +150,36 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void prev() {
-        Toast.makeText(this, "prev", Toast.LENGTH_SHORT).show();
+        if (index == 0){
+            return;
+        }
+        Song song = (Song) listView.getItemAtPosition(--index);
+        fragment.setSong(String.valueOf(song.getImage()), song);
+
+        loadAndPlaySong(song);
     }
 
     /**
      *
      */
     @Override
-    public void playPause() {
-        Toast.makeText(this, "play", Toast.LENGTH_SHORT).show();
+    public void playPause(Song song) {
+        isPlaying = !isPlaying;
+        fragment.changeIcon(isPlaying);
+
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show();
+        } else {
+            mediaPlayer.pause();
+            Toast.makeText(this, "Paused", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 
-    public void loadPlaylist(){
+    public void loadPlaylist() {
         final String uid = mAuth.getCurrentUser().getUid().toString();
         mDatabase.getReference("Playlists").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -152,7 +192,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
                     Song song = new Song(rawSong.get("name").toString(),
                             rawSong.get("artist").toString(),
                             resId,
-                            rawSong.get("file") != null ? rawSong.get("file").toString(): "",
+                            rawSong.get("file") != null ? rawSong.get("file").toString() : "",
                             key);
                     songs.add(song);
                 }
@@ -168,5 +208,12 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+    }
 }
 

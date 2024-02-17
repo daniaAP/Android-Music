@@ -2,6 +2,7 @@ package com.example.daniaapplication;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ public class PlayingFragment extends Fragment {
     public ImageView albumphoto;
     public TextView songname;
     public ImageButton prev,play,next;
-
+    public Song song;
     public PlayingFragment() {
         // Required empty public constructor
     }
@@ -41,7 +42,7 @@ public class PlayingFragment extends Fragment {
     public interface PlayingFragmentListener{
         public void next();
         public void prev();
-        public void playPause();
+        public void playPause(Song song);
     }
 
     //this is called whenever the fragment is attached to an activity
@@ -78,13 +79,13 @@ public class PlayingFragment extends Fragment {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activityControl.playPause();
+                activityControl.playPause(PlayingFragment.this.song);
             }
         });
         return view;
     }
 
-    public void setSong(String image, String name){
+    public void setSong(String image, Song song){
         int defaultImage = this.getResources().getIdentifier(image,null, getContext().getPackageName());
         ImageLoader imageLoader = ImageLoader.getInstance();
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -93,7 +94,8 @@ public class PlayingFragment extends Fragment {
                 .showImageOnFail(defaultImage)
                 .showImageOnLoading(defaultImage).build();
         imageLoader.displayImage(image,albumphoto,options);
-        songname.setText(name);
+        songname.setText(song.getName());
+        this.song = song;
     }
 
     public void changeIcon(Boolean check){
