@@ -8,6 +8,7 @@ public class Song implements Comparable<Song>, Serializable {
     private String file;
     private Integer image;
 
+    private String key;
 
     public Song(String name, String artist, Integer image) {
         this.name = name;
@@ -18,6 +19,11 @@ public class Song implements Comparable<Song>, Serializable {
     public Song(String name, String artist, Integer image, String file) {
         this(name, artist, image);
         this.file = file;
+    }
+    public Song(String name, String artist, Integer image, String file, String key) {
+        this(name, artist, image, file);
+        this.key = key;
+
     }
 
     public String getName() {
@@ -78,5 +84,21 @@ public class Song implements Comparable<Song>, Serializable {
 
     public String getTime() {
         return null;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

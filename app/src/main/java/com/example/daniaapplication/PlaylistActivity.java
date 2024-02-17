@@ -105,8 +105,13 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Song song = arrayAdapter.getItem(position);
+        final String uid = mAuth.getCurrentUser().getUid().toString();
+
+        mDatabase.getReference("Playlists").child(uid).child(song.getKey()).removeValue();
+        loadPlaylist();
         Toast.makeText(this, "onItemLongClick", Toast.LENGTH_SHORT).show();
-        return false;
+        return true;
     }
 
     /**
@@ -139,19 +144,21 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
         mDatabase.getReference("Playlists").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Map> songList = (List<Map>) snapshot.getValue();
+                Map<String, Map> songList = (Map<String, Map>) snapshot.getValue();
                 songs = new ArrayList<>();
-                int index = 0;
-                for (Map rawSong : songList) {
-                    int resId = Utilities.imageToResId(PlaylistActivity.this, rawSong.get("image").toString());
+                for (String key : songList.keySet()) {
+                    Map<String, String> rawSong = songList.get(key);
+                    int resId = Utilities.imageToResId(PlaylistActivity.this, String.valueOf(rawSong.get("image")));
                     Song song = new Song(rawSong.get("name").toString(),
                             rawSong.get("artist").toString(),
                             resId,
-                            rawSong.get("file").toString());
+                            rawSong.get("file") != null ? rawSong.get("file").toString(): "",
+                            key);
                     songs.add(song);
                 }
                 arrayAdapter = new SongArrayAdapter(PlaylistActivity.this, R.layout.custom_row, songs);
                 listView.setAdapter(arrayAdapter);
+
             }
 
             @Override

@@ -11,11 +11,14 @@ import java.util.List;
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHolder> {
 
     private List<Song> songs;
-
+    private OnSongClickListener listener;
     public SongsAdapter(List<Song> songs) {
         this.songs = songs;
     }
-
+    public SongsAdapter(List<Song> songs, OnSongClickListener listener) {
+        this.songs = songs;
+        this.listener = listener;
+    }
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -27,8 +30,24 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
     public void onBindViewHolder(SongViewHolder holder, int position) {
         Song song = songs.get(position);
         holder.songTitle.setText(song.getName());
-        // Set more data to views if needed
-
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(SongsAdapter.this.listener != null){
+                    SongsAdapter.this.listener.onSongClick(song);
+                }
+            }
+        });
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(SongsAdapter.this.listener != null){
+                    SongsAdapter.this.listener.onSongLongClick(song);
+                    return true;
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -39,14 +58,18 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
     }
 
     public static class SongViewHolder extends RecyclerView.ViewHolder {
-
+        View view;
         TextView songTitle;
         // Define more views
 
         public SongViewHolder(View itemView) {
             super(itemView);
             songTitle = itemView.findViewById(R.id.song_title);
-            // Initialize more views
+            view = itemView;
         }
+    }
+
+    public void setListener(OnSongClickListener listener) {
+        this.listener = listener;
     }
 }

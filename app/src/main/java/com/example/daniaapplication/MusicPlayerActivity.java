@@ -2,6 +2,7 @@ package com.example.daniaapplication;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MusicPlayerActivity extends AppCompatActivity {
+public class MusicPlayerActivity extends AppCompatActivity implements OnSongClickListener {
+    private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private RecyclerView songsRecyclerView;
     ImageView imageViewAlbumArt;
@@ -30,6 +33,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_music_player);
         imageViewAlbumArt = findViewById(R.id.album_art);
 
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         songsRecyclerView = findViewById(R.id.songs_recycler_view);
 
@@ -99,6 +103,23 @@ public class MusicPlayerActivity extends AppCompatActivity {
         // Set up the RecyclerView
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         SongsAdapter adapter = new SongsAdapter(songList);
+        adapter.setListener(MusicPlayerActivity.this);
         songsRecyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onSongClick(Song s) {
+        Toast.makeText(this, "Song click", Toast.LENGTH_SHORT).show();
+        //TODO play music
+    }
+
+    @Override
+    public void onSongLongClick(Song s) {
+        final String uid = mAuth.getCurrentUser().getUid().toString();
+        mDatabase.getReference("Playlists").child(uid).push().setValue(s);
+
+        Toast.makeText(this, "Song added to Playlist", Toast.LENGTH_SHORT).show();
+
     }
 }
