@@ -78,8 +78,8 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
-        Email.setText(email);
-        password.setText(pass);
+        Email.setText("kda@gmail.com");
+        password.setText("123456789");
     }
 
     public void signIn(String email, String pass) {

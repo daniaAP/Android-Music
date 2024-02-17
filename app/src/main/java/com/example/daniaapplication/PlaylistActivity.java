@@ -35,6 +35,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 //extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener, MediaPlayer.OnCompletionListener, PlayingFragment.PlayingFragmentListener, SeekBar.OnSeekBarChangeListener
 public class PlaylistActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, View.OnClickListener, PlayingFragment.PlayingFragmentListener {
@@ -44,13 +48,14 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     private MediaPlayer player;
     private PlayingFragment fragment;
     private Song playing;
-    private Button playPause,shuffle;
+    private Button playPause, shuffle;
     private int index;
     private SeekBar seekBar;
-    private TextView place,duration;
+    private TextView place, duration;
     private Handler mHandler = new Handler();
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,32 +66,9 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
         listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
-        songs = new ArrayList<Song>();
 
-        final String uid = mAuth.getCurrentUser().getUid().toString();
-        mDatabase.getReference("Playlists").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        loadPlaylist();
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-        Song golden = new Song("Golden Slumber", "The Beatles", 1, R.drawable.beatles);
-        Song sun = new Song("Here Comes The Sun", "The Beatles", 2, R.drawable.beatles);
-        Song something = new Song("Something", "The Beatles", 3, R.drawable.beatles);
-        songs = new ArrayList<>();
-        songs.add(golden);
-        songs.add(sun);
-        songs.add(something);
-        arrayAdapter = new SongArrayAdapter(this, R.layout.custom_row, songs);
-        listView.setAdapter(arrayAdapter);
         fragment = (PlayingFragment) getSupportFragmentManager().findFragmentById(R.id.frPlaying);
     }
 
@@ -108,8 +90,8 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Song song = (Song)listView.getItemAtPosition(position);
-        fragment.setSong(String.valueOf(song.getImage()),song.getName());
+        Song song = (Song) listView.getItemAtPosition(position);
+        fragment.setSong(String.valueOf(song.getImage()), song.getName());
         index = position;
         fragment.changeIcon(true);
     }
@@ -149,6 +131,38 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void playPause() {
         Toast.makeText(this, "play", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void loadPlaylist(){
+        final String uid = mAuth.getCurrentUser().getUid().toString();
+        mDatabase.getReference("Playlists").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Map> songList = (List<Map>) snapshot.getValue();
+                songs = new ArrayList<>();
+                int index = 0;
+                for (Map rawSong : songList) {
+                    int resId = imageToResId(rawSong.get("image").toString());
+                    Song song = new Song(rawSong.get("name").toString(),
+                            rawSong.get("artist").toString(),
+                            resId,
+                            rawSong.get("file").toString());
+                    songs.add(song);
+                }
+                arrayAdapter = new SongArrayAdapter(PlaylistActivity.this, R.layout.custom_row, songs);
+                listView.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private Integer imageToResId(String imagename){
+        return this.getResources().getIdentifier(imagename, "drawable",  this.getPackageName());
+
     }
 }
 

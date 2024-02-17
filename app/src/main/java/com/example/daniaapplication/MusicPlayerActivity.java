@@ -24,11 +24,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
         // Assuming you have a Song model and have initialized a List<Song> somewhere
         List<Song> songList = new ArrayList<>(); // Populate this with your songs
-        songList.add(new Song("Song 1", "Amy", 1, R.drawable.amy));
-        songList.add(new Song("Song 2", "Amy", 2, R.drawable.amy));
-        songList.add(new Song("Song 3", "Amy", 3, R.drawable.amy));
-        songList.add(new Song("Song 4", "Amy", 4, R.drawable.amy));
-        songList.add(new Song("Song 5", "Amy", 5, R.drawable.amy));
+        songList.add(new Song("Song 1", "Amy", R.drawable.amy));
+        songList.add(new Song("Song 2", "Amy", R.drawable.amy));
+        songList.add(new Song("Song 3", "Amy", R.drawable.amy));
+        songList.add(new Song("Song 4", "Amy", R.drawable.amy));
+        songList.add(new Song("Song 5", "Amy", R.drawable.amy));
 
         String artist = getIntent().getStringExtra("album");
         List<String> songs = Constants.SONGS.get(artist);

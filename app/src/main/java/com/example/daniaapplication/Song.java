@@ -5,28 +5,20 @@ import java.io.Serializable;
 public class Song implements Comparable<Song>, Serializable {
     private String name;
     private String artist;
-    private int id;
-    private String key;
+    private String file;
     private Integer image;
 
-    public Song(String stDate, String stAlbum, String stName, String stArtist, String stTime) {
-    }
 
-    public Song(String name, String artist, int id, Integer image) {
+    public Song(String name, String artist, Integer image) {
         this.name = name;
         this.artist = artist;
-        this.id = id;
         this.image = image;
     }
 
-    public String getKey() {
-        return key;
+    public Song(String name, String artist, Integer image, String file) {
+        this(name, artist, image);
+        this.file = file;
     }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
 
     public String getName() {
         return name;
@@ -44,13 +36,7 @@ public class Song implements Comparable<Song>, Serializable {
         this.artist = artist;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Integer getImage() {
         return image;
@@ -65,7 +51,6 @@ public class Song implements Comparable<Song>, Serializable {
         return "Song{" +
                 "name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
-                ", id=" + id +
                 ", image='" + image + '\'' +
                 '}';
     }

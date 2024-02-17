@@ -21,8 +21,8 @@ class Album implements Comparable<Album>, Serializable {
         songs = new ArrayList<Song>();
     }
 
-    public void addSong(String name, int raw) {
-        songs.add(new Song(name, this.artist, raw, this.image));
+    public void addSong(String name) {
+        songs.add(new Song(name, this.artist, this.image));
     }
 
     public String getName() {
