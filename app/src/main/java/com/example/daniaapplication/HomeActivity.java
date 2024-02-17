@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 List<Album> albumList = new ArrayList<>();
                 List<Map> rawAlbums = (List<Map>) snapshot.getValue();
                 for (Map rawAlbum : rawAlbums) {
-                    int imageResId = imageToResId(rawAlbum.get("image").toString());
+                    int imageResId = Utilities.imageToResId(HomeActivity.this, rawAlbum.get("image").toString());
                     Album album = new Album(rawAlbum.get("name").toString(),
                             rawAlbum.get("artist").toString(),
                             imageResId);
@@ -227,15 +227,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
      * @param s
      */
     @Override
-    public void onAlbumClick(Album s) {
+    public void onAlbumClick(Album album) {
         Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MusicPlayerActivity.class);
-        intent.putExtra("album", (CharSequence) s.getArtist());
+        intent.putExtra("album", album.getName());
         startActivity(intent);
     }
 
-    private Integer imageToResId(String imagename) {
-        return this.getResources().getIdentifier(imagename, "drawable", this.getPackageName());
 
-    }
 }

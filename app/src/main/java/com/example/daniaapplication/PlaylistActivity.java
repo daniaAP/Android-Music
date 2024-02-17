@@ -143,7 +143,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
                 songs = new ArrayList<>();
                 int index = 0;
                 for (Map rawSong : songList) {
-                    int resId = imageToResId(rawSong.get("image").toString());
+                    int resId = Utilities.imageToResId(PlaylistActivity.this, rawSong.get("image").toString());
                     Song song = new Song(rawSong.get("name").toString(),
                             rawSong.get("artist").toString(),
                             resId,
@@ -160,9 +160,6 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
             }
         });
     }
-    private Integer imageToResId(String imagename){
-        return this.getResources().getIdentifier(imagename, "drawable",  this.getPackageName());
 
-    }
 }
 
