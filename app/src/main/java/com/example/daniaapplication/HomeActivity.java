@@ -1,4 +1,5 @@
 package com.example.daniaapplication;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,9 +24,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 //after implements ,
@@ -46,6 +54,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Album> albums;//DATA
     private ArrayAdapter<Album> arrayAdapter;//Adapter
     private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
 
 
     @SuppressLint("MissingInflatedId")
@@ -63,81 +72,75 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         feedback = findViewById(R.id.feedback);
 
 
-        List<Album> albumList = new ArrayList<>();
+        loadAlbums();
 
-        albumList.add(new Album("Album 1", "ABBA ", R.drawable.abba));
-        albumList.add(new Album("Album 2", "Fine Line", R.drawable.fineline));
-        albumList.add(new Album("Album 3", "Harry's House", R.drawable.harryshouse));
-        albumList.add(new Album("Album 4", "Micheal jackson", R.drawable.michealjackson));
-        albumList.add(new Album("Album 5", "Midnight Memories", R.drawable.midnightmemories));
-        albumList.add(new Album("Album 6", "Queen", R.drawable.queen));
-        albumList.add(new Album("Album 7", "Taylor Swift", R.drawable.taylorswift));
-        albumList.add(new Album("Album 8", "Avril Lavigne ", R.drawable.avrillavegne));
-
-
-        HomeAdapter adapter = new HomeAdapter(this, albumList);
-
-        recyclerView = findViewById(R.id.recycler_view_playlist);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
+//        albumList.add(new Album("Album 1", "ABBA ", R.drawable.abba));
+//        albumList.add(new Album("Album 2", "Fine Line", R.drawable.fineline));
+//        albumList.add(new Album("Album 3", "Harry's House", R.drawable.harryshouse));
+//        albumList.add(new Album("Album 4", "Micheal jackson", R.drawable.michealjackson));
+//        albumList.add(new Album("Album 5", "Midnight Memories", R.drawable.midnightmemories));
+//        albumList.add(new Album("Album 6", "Queen", R.drawable.queen));
+//        albumList.add(new Album("Album 7", "Taylor Swift", R.drawable.taylorswift));
+//        albumList.add(new Album("Album 8", "Avril Lavigne ", R.drawable.avrillavegne));
 
         Optional<User> optionalUser = Optional.ofNullable(user);
         optionalUser.map(User::toString);
         playlist.setOnClickListener(this);
         feedback.setOnClickListener(this);
-//        Query database;
-//        database = FirebaseDatabase.getInstance().getReference("Albums");
-//        database.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                albums = new ArrayList<Album>();
-//                for (DataSnapshot data : snapshot.getChildren()) {
-//                    Album album = data.getValue(Album.class);
-//                    albums.add(album);
-//                }
-//                Collections.sort(albums);
-////                arrayAdapter = new AlbumArrayAdapter(HomeActivity.this,R.layout.custom_grid, albums);
-////                gridView.setAdapter(arrayAdapter);
-//                HomeAdapter homeAdapter = new HomeAdapter(albums);
-//                recyclerView.setAdapter(homeAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        mAuth = FirebaseAuth.getInstance();
-        //understand this
-        //   User user = (User) intent.getSerializableExtra("user");
-        //  if (user != null) {
-        //     Log.d("user", user.toString());
-        // } else {
-        //     Log.d("user", "User is null");
-        //  }
 
     }
-    private void initElements () {
+
+    private void loadAlbums() {
+        DatabaseReference dbRef = mDatabase.getReference("Albums");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Album> albumList = new ArrayList<>();
+                List<Map> rawAlbums = (List<Map>) snapshot.getValue();
+                for (Map rawAlbum : rawAlbums) {
+                    int imageResId = imageToResId(rawAlbum.get("image").toString());
+                    Album album = new Album(rawAlbum.get("name").toString(),
+                            rawAlbum.get("artist").toString(),
+                            imageResId);
+                    albumList.add(album);
+                }
+                HomeAdapter adapter = new HomeAdapter(HomeActivity.this, albumList);
+
+                recyclerView = findViewById(R.id.recycler_view_playlist);
+                recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+                recyclerView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void initElements() {
         activity = HomeActivity.this;
         context = HomeActivity.this;
 
         swNetworkConnected = findViewById(R.id.swNetworkConnected);
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
-       internetConnectionReceiver=new InternetConnectionReceiver();
+        internetConnectionReceiver = new InternetConnectionReceiver();
         intentConnectionFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
-   }
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+    }
 
 
-    protected void onStart () {
+    protected void onStart() {
         super.onStart();
         registerReceiver(internetConnectionReceiver, intentConnectionFilter);
 
     }
 
 
-    protected void onStop () {
+    protected void onStop() {
         super.onStop();
         unregisterReceiver(internetConnectionReceiver);
     }
@@ -202,11 +205,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.Music) {
             String text = item.getTitle().toString();
             Intent svc = new Intent(this, BackgroundMusicService.class);
-            if(text.equals("Play Music")) {
+            if (text.equals("Play Music")) {
                 startService(svc);
                 item.setTitle("Stop Music");
-            }
-            else {
+            } else {
                 stopService(svc);
                 item.setTitle("Play Music");
             }
@@ -230,5 +232,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, MusicPlayerActivity.class);
         intent.putExtra("album", (CharSequence) s.getArtist());
         startActivity(intent);
+    }
+
+    private Integer imageToResId(String imagename) {
+        return this.getResources().getIdentifier(imagename, "drawable", this.getPackageName());
+
     }
 }
