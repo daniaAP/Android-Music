@@ -1,0 +1,156 @@
+{
+  "project_info": {
+    "project_number": "418969977900",
+    "firebase_url": "https://projdania-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "projdania",
+    "storage_bucket": "projdania.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418969977900:android:67f8927da3de1a7b33fd89",
+        "android_client_info": {
+          "package_name": "com.example.andriodmusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDLIENTgTyZhW3y-wDNkxQ0HGBi5T_YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418969977900:android:6d9948dbafa39dde33fd89",
+        "android_client_info": {
+          "package_name": "com.example.artbydania"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDLIENTgTyZhW3y-wDNkxQ0HGBi5T_YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418969977900:android:a10d147900fe07dc33fd89",
+        "android_client_info": {
+          "package_name": "com.example.daniaapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDLIENTgTyZhW3y-wDNkxQ0HGBi5T_YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418969977900:android:c52d5ad9976cf1ec33fd89",
+        "android_client_info": {
+          "package_name": "com.example.daniaproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDLIENTgTyZhW3y-wDNkxQ0HGBi5T_YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418969977900:android:328474b23a91283933fd89",
+        "android_client_info": {
+          "package_name": "com.example.projdania"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGDLIENTgTyZhW3y-wDNkxQ0HGBi5T_YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418969977900-3i22f56rvhftsv4sfgonnblpadr3vpo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
