@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The circular border -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" /> <!-- Transparent background -->
+            <stroke android:width="30dp" android:color="#000000" /> <!-- Red border -->
+        </shape>
+    </item>
+    <!-- The image in the center -->
+    <item android:drawable="@drawable/user" android:gravity="center" />
+</layer-list>
