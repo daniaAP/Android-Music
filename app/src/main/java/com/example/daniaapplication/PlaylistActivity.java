@@ -67,6 +67,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
 
+
         listView = findViewById(R.id.listView);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
@@ -103,13 +104,12 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
 
     private void loadAndPlaySong(Song song) {
         int songResId = Utilities.songToResId(PlaylistActivity.this, song.getFile());
-        if(mediaPlayer != null){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-            this.isPlaying = false;
-        }
-
-        mediaPlayer = MediaPlayer.create(this, songResId);
+        mediaPlayer = MediaPlayer.create(this, R.raw.beatlessun);
+//        if(mediaPlayer != null){
+//            mediaPlayer.stop();
+//            mediaPlayer.reset();
+//            this.isPlaying = false;
+//        }
         playPause(song);
     }
 

@@ -3,12 +3,15 @@ package com.example.daniaapplication;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,8 +40,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-//after implements ,
+import android.os.Handler;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.os.Build;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, OnAlbumClickListener {
+    private static final int NOTIFICATION_ID = 1;
+    private static final String CHANNEL_ID = "my_channel_id";
+    private static final int MESSAGE_DELAY = 5000; //  5 seconds
 
     Context context;
     Activity activity;
@@ -55,40 +71,83 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayAdapter<Album> arrayAdapter;//Adapter
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-
+    private int importance;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mDatabase = FirebaseDatabase.getInstance();
+        loadAlbums();
         initElements();
-
-
-        Intent intent = getIntent();
+        Intent i = getIntent();
         // removed name and image
         //user = new User("image","name","email", "pass");
         playlist = findViewById(R.id.playlist);
+
         feedback = findViewById(R.id.feedback);
 
-
-        loadAlbums();
-
-//        albumList.add(new Album("Album 1", "ABBA ", R.drawable.abba));
-//        albumList.add(new Album("Album 2", "Fine Line", R.drawable.fineline));
-//        albumList.add(new Album("Album 3", "Harry's House", R.drawable.harryshouse));
-//        albumList.add(new Album("Album 4", "Micheal jackson", R.drawable.michealjackson));
-//        albumList.add(new Album("Album 5", "Midnight Memories", R.drawable.midnightmemories));
-//        albumList.add(new Album("Album 6", "Queen", R.drawable.queen));
-//        albumList.add(new Album("Album 7", "Taylor Swift", R.drawable.taylorswift));
-//        albumList.add(new Album("Album 8", "Avril Lavigne ", R.drawable.avrillavegne));
 
         Optional<User> optionalUser = Optional.ofNullable(user);
         optionalUser.map(User::toString);
         playlist.setOnClickListener(this);
         feedback.setOnClickListener(this);
+        // Set up a handler to send a message after  5 seconds
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // This code will execute after  5 seconds
+                Toast.makeText(HomeActivity.this, "listen to your favorite artists", Toast.LENGTH_SHORT).show();
+            }
+        }, MESSAGE_DELAY);
+        // Create a notification channel for Android Oreo and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "My Channel";
+            String description = "Channel for my notifications";
+            importance = NotificationManagerCompat.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.createNotificationChannel(channel);
+        }
 
+        // Schedule the alarm to trigger  5 seconds after the app is opened
+        Intent intent = new Intent(this, MyAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
     }
+
+
+    public class MyAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Build and display the notification
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.baseline_notifications_24)
+                    .setContentTitle("Notification Title")
+                    .setContentText("Notification Text")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+            if (ActivityCompat.checkSelfPermission(HomeActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        }
+    }
+
+
+
+
 
     private void loadAlbums() {
         DatabaseReference dbRef = mDatabase.getReference("Albums");
@@ -128,6 +187,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         internetConnectionReceiver = new InternetConnectionReceiver();
         intentConnectionFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
     }
@@ -135,7 +195,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onStart() {
         super.onStart();
-        registerReceiver(internetConnectionReceiver, intentConnectionFilter);
+           registerReceiver(internetConnectionReceiver, intentConnectionFilter);
+
 
     }
 
@@ -224,7 +285,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * @param s
+     * @param album
      */
     @Override
     public void onAlbumClick(Album album) {

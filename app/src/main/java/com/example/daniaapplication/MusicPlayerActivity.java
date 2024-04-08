@@ -37,7 +37,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements OnSongClic
         mDatabase = FirebaseDatabase.getInstance();
         songsRecyclerView = findViewById(R.id.songs_recycler_view);
 
-//
+
         String albumName = getIntent().getStringExtra("album");
         loadAlbum(albumName);
 
@@ -45,11 +45,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements OnSongClic
 
         // Assuming you have a Song model and have initialized a List<Song> somewhere
         List<Song> songList = new ArrayList<>(); // Populate this with your songs
-//        songList.add(new Song("Song 1", "Amy", R.drawable.amy));
-//        songList.add(new Song("Song 2", "Amy", R.drawable.amy));
-//        songList.add(new Song("Song 3", "Amy", R.drawable.amy));
-//        songList.add(new Song("Song 4", "Amy", R.drawable.amy));
-//        songList.add(new Song("Song 5", "Amy", R.drawable.amy));
 
         // Set up the RecyclerView
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
