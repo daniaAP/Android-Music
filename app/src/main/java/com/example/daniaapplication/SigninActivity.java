@@ -34,7 +34,7 @@ public class SigninActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
         Email = findViewById(R.id.email);
         password = findViewById(R.id.etPass);
-        andr = findViewById(R.id.textView);
+//        andr = findViewById(R.id.textView);
         acc = findViewById(R.id.tvSignin);
         signin = findViewById(R.id.signin);
         save = findViewById(R.id.save);

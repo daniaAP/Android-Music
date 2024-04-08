@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/login_backround">
     <TextView
         android:id="@+id/myacc"
         android:gravity="center"
@@ -20,31 +21,49 @@
 
     <EditText
         android:id="@+id/email2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:hint="Email"
         android:inputType="text"
+        android:background="@drawable/edittext_bg"
         android:minHeight="48dp"
         />
 
     <EditText
         android:id="@+id/etUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Username"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/edittext_bg"
         android:inputType="text"
         android:minHeight="48dp"
         />
 
     <EditText
         android:id="@+id/pass"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:hint="Password"
         android:inputType="textPassword"
+        android:background="@drawable/edittext_bg"
         android:minHeight="48dp" />
 
     <Button
@@ -54,6 +73,8 @@
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:background="@drawable/button_bg"
         android:text="Sign up" />
 
     <Button
@@ -63,6 +84,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:background="@drawable/button_bg"
         android:text="Previous" />
 
     <ProgressBar
