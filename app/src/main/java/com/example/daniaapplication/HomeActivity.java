@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,50 +105,32 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }, MESSAGE_DELAY);
         // Create a notification channel for Android Oreo and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "My Channel";
-            String description = "Channel for my notifications";
-            importance = NotificationManagerCompat.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            CharSequence name = "NotificationChannel";
+            String description = "NotificationChannelDescription";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("YOUR_CHANNEL_ID", name, importance);
             channel.setDescription(description);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
-        // Schedule the alarm to trigger  5 seconds after the app is opened
-        Intent intent = new Intent(this, MyAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
-    }
-
-
-    public class MyAlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Build and display the notification
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.baseline_notifications_24)
-                    .setContentTitle("Notification Title")
-                    .setContentText("Notification Text")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-            if (ActivityCompat.checkSelfPermission(HomeActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 100);
+            return;
         }
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+// Set the alarm to start at a specific time.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis() + 5000);
+
+
+// With set(), you need to specify the exact time for the alarm to trigger.
+// For repeating alarms, you can use setRepeating() or setInexactRepeating().
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
-
-
-
 
 
     private void loadAlbums() {
@@ -195,7 +179,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onStart() {
         super.onStart();
-           registerReceiver(internetConnectionReceiver, intentConnectionFilter);
+        registerReceiver(internetConnectionReceiver, intentConnectionFilter);
 
 
     }
@@ -295,5 +279,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted, proceed with showing a notification
+//                showNotification(); // This is your method to show the notification
+            } else {
+                // Permission denied. Disable the functionality that depends on this permission.
+            }
+        }
+    }
 }

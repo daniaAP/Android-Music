@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.media.MediaActionSound;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -110,7 +111,13 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
             mediaPlayer.reset();
             this.isPlaying = false;
         }
-        mediaPlayer = MediaPlayer.create(this, songResId);
+        try {
+            mediaPlayer = MediaPlayer.create(this, songResId);
+        }catch (Resources.NotFoundException ex){
+            Toast.makeText(this, "Song not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         playPause(song);
     }
 
@@ -128,7 +135,6 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
 
         mDatabase.getReference("Playlists").child(uid).child(song.getKey()).removeValue();
         loadPlaylist();
-        Toast.makeText(this, "onItemLongClick", Toast.LENGTH_SHORT).show();
         return true;
     }
 

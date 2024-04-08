@@ -1,6 +1,10 @@
 package com.example.daniaapplication;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -26,6 +30,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements OnSongClic
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private RecyclerView songsRecyclerView;
+    private Vibrator vibrator;
     ImageView imageViewAlbumArt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements OnSongClic
         String albumName = getIntent().getStringExtra("album");
         loadAlbum(albumName);
 
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 
         // Assuming you have a Song model and have initialized a List<Song> somewhere
@@ -103,18 +109,32 @@ public class MusicPlayerActivity extends AppCompatActivity implements OnSongClic
 
     }
 
+
     @Override
     public void onSongClick(Song s) {
-        Toast.makeText(this, "Song click", Toast.LENGTH_SHORT).show();
-        //TODO play music
+
     }
 
     @Override
     public void onSongLongClick(Song s) {
         final String uid = mAuth.getCurrentUser().getUid().toString();
         mDatabase.getReference("Playlists").child(uid).push().setValue(s);
-
+        if (vibrator!= null){
+            vibrate();
+        }
         Toast.makeText(this, "Song added to Playlist", Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void vibrate() {
+        if (vibrator != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // New vibrate method for API Level 26 (Android O) and above
+                vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                // Deprecated method for below API Level 26
+                vibrator.vibrate(1000);
+            }
+        }
     }
 }
