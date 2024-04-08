@@ -8,7 +8,8 @@
     tools:context=".HomeActivity"
     android:layout_gravity="center"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/login_backround">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,17 +32,6 @@
     </LinearLayout>
 
 
-    <Switch
-        android:id="@+id/swNetworkConnected"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
-        android:background="#FFFFFF"
-        android:showText="true"
-        android:textOn="Start"
-        android:textOff="Stop"
-        android:text="Network On/Off Receiver" />
-
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
@@ -56,22 +46,31 @@
     <Button
         android:id="@+id/playlist"
         android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="25dp"
         android:layout_marginLeft="25dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
         android:text="Playlist"
          />
     <Button
         android:id="@+id/feedback"
         android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="25dp"
         android:layout_marginLeft="25dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
         android:text="Feedback"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_playlist"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

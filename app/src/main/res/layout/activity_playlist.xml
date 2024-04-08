@@ -1,79 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlaylistActivity"
-    android:orientation="vertical">
-    <LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/login_backround"
+    tools:context=".PlaylistActivity">
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:gravity="center_horizontal">
-        <Button
-            android:id="@+id/playPause"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="60dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/play_button"
-            android:textAllCaps="false"
-            android:textColor="#FD1D43"
-            android:text="Play"
-            android:layout_marginLeft="17dp"
-            android:textStyle="bold"
-            android:fontFamily="serif"
-            android:textSize="24sp"/>
-        <Button
-            android:id="@+id/shuffle"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="60dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/play_button"
-            android:textAllCaps="false"
-            android:textColor="#FD1D43"
-            android:layout_marginRight="17dp"
-            android:text="Shuffle"
-            android:textStyle="bold"
-            android:fontFamily="serif"
-            android:textSize="24sp"/>
-    </LinearLayout>
-    <SeekBar
-        android:id="@+id/seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/place"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp" />
-        <TextView
-            android:id="@+id/duration"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layoutDirection="rtl"/>
-    </LinearLayout>
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Playlist"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+         />
+
     <fragment
-        android:layout_weight="2.6"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.example.daniaapplication.PlayingFragment"
         android:id="@+id/frPlaying"
+        android:name="com.example.daniaapplication.PlayingFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
         tools:ignore="MissingClass" />
 </LinearLayout>

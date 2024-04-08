@@ -92,11 +92,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         viewHolder.getTextViewArtist().setText(album.getArtist());
         viewHolder.getImageViewAlbum().setImageResource(album.getImage());
 
-        if (position % 2 == 0) {
-            viewHolder.getView().setBackgroundResource(R.color.gray);
-        } else {
-            viewHolder.getView().setBackgroundResource(R.color.white);
-        }
+//        if (position % 2 == 0) {
+//            viewHolder.getView().setBackgroundResource(R.color.gray);
+//        } else {
+//            viewHolder.getView().setBackgroundResource(R.color.white);
+//        }
 
         if (this.onAlbumClickListener != null) {
             viewHolder.getView().setOnClickListener(new View.OnClickListener() {

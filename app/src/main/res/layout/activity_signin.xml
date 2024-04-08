@@ -4,32 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/login_backround"
+    android:orientation="vertical"
     tools:context=".SigninActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="108dp"
         android:layout_height="108dp"
+        android:layout_gravity="center"
         android:layout_marginTop="32dp"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        android:layout_gravity="center"/>
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edittext_bg"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:background="@drawable/edittext_bg"
         android:ems="10"
         android:hint="Email"
         android:inputType="text"
         android:minHeight="48dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:layout_editor_absoluteX="100dp"
         tools:layout_editor_absoluteY="179dp" />
 
@@ -37,12 +37,12 @@
         android:id="@+id/etPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
         android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:paddingStart="16dp"
@@ -53,22 +53,22 @@
     <CheckBox
         android:id="@+id/save"
         android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="Save details" />
 
     <Button
         android:id="@+id/signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_bg"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-
-        android:text="Sign in" />
+        android:background="@drawable/button_bg"
+        android:text="Sign in"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/tvSignin"

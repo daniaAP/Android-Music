@@ -182,7 +182,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         activity = HomeActivity.this;
         context = HomeActivity.this;
 
-        swNetworkConnected = findViewById(R.id.swNetworkConnected);
+//        swNetworkConnected = findViewById(R.id.swNetworkConnected);
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
         internetConnectionReceiver = new InternetConnectionReceiver();
         intentConnectionFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);

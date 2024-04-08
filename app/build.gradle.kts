@@ -42,6 +42,7 @@ dependencies {
 
     //added new
     implementation ("com.nostra13.universalimageloader:universal-image-loader:1.9.5")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //this now is for
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

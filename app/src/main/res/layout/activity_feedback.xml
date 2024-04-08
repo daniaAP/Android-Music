@@ -4,42 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedbackActivity"
+    android:background="@drawable/login_backround"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".FeedbackActivity">
 
     <TextView
-    android:id="@+id/textView2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Feedback" />
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feedback"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <EditText
         android:id="@+id/feed"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="enter feedback"
         android:layout_margin="20dp"
-        />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edittext_bg"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="enter feedback"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="6"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
     <Button
         android:id="@+id/sub"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="submit"
-        />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_bg"
+        android:text="submit" />
 
     <TextView
         android:id="@+id/myfeed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your feedback:"
+        android:layout_marginTop="30dp"
         android:gravity="center"
-        android:layout_marginTop="30dp"/>
-
-
+        android:text="Your feedback:" />
 
 
 </LinearLayout>

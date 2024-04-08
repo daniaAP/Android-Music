@@ -60,6 +60,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private boolean isPlaying = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,17 +100,17 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
         fragment.setSong(String.valueOf(song.getImage()), song);
         index = position;
 
-       loadAndPlaySong(song);
+        loadAndPlaySong(song);
     }
 
     private void loadAndPlaySong(Song song) {
         int songResId = Utilities.songToResId(PlaylistActivity.this, song.getFile());
-        mediaPlayer = MediaPlayer.create(this, R.raw.beatlessun);
-//        if(mediaPlayer != null){
-//            mediaPlayer.stop();
-//            mediaPlayer.reset();
-//            this.isPlaying = false;
-//        }
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            this.isPlaying = false;
+        }
+        mediaPlayer = MediaPlayer.create(this, songResId);
         playPause(song);
     }
 
@@ -136,7 +137,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void next() {
-        if (index == arrayAdapter.getCount()-1){
+        if (index == arrayAdapter.getCount() - 1) {
             return;
         }
         Song song = (Song) listView.getItemAtPosition(++index);
@@ -150,7 +151,7 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void prev() {
-        if (index == 0){
+        if (index == 0) {
             return;
         }
         Song song = (Song) listView.getItemAtPosition(--index);
@@ -211,9 +212,10 @@ public class PlaylistActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onPause() {
         super.onPause();
-
-        mediaPlayer.stop();
-        mediaPlayer.reset();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
     }
 }
 
