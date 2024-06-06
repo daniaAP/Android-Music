@@ -30,9 +30,6 @@
             android:name=".MusicPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".RecordActivity"
-            android:exported="false" />
-        <activity
             android:name=".AllFeedbackActivity"
             android:exported="false" />
         <activity
